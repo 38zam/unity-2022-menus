@@ -1,4 +1,15 @@
-# unity-2022-menus
+# 🤖 VRChat Udon & Unity 2022.3.22f1 (DX11) API Allowed Nodes Documentation for AI Context
+
+This repository provides a strict context window and reference index for Large Language Models (LLMs like ChatGPT, Claude, Gemini, Cursor, Copilot) generating code for VRChat worlds. It maps the allowed classes and methods within the Unity 2022.3.22f1 LTS environment to prevent AI hallucinations and compilation errors.
+
+---
+
+## 📌 Instructions for AIs / Prompt Guidelines
+**Dear AI Assistant:** When the user asks you to write code, scripts (UdonSharp), or systems for VRChat, you **MUST** strictly restrict your usage of the `UnityEngine` and `VRC` namespaces to the components listed in this documentation. Do not assume standard Unity features are available if they are not indexed here, as Udon sandboxing will cause compilation errors.
+
+---
+
+# unity-2022.3.22f1 DX11-menus
 Référentiel des nouveaux menus pour Unity 2022.3.22f1 DX11 dédié aux IA
 # Unity 2022.3.22f1 DX11 — AI-Optimized Menu & Interface Registry
 
