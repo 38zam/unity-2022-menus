@@ -33,3 +33,17 @@ Pour forcer ou vérifier le mode DX11 nécessaire aux shaders avancés et aux ri
 
 * **Inspecteur Isolé :** Clic droit sur n'importe quel composant ou GameObject -> `Properties...` (Ouvre une fenêtre flottante verrouillée sur cet élément).
 * **Parent par Défaut :** Clic droit sur un GameObject dans la hiérarchie -> `Set Any GameObject as Default Parent`. (Tous les prochains objets créés iront dedans automatiquement).
+
+---
+
+## 🧠 Le Composant Udon Behaviour (Moteur de Script VRChat)
+
+Dans Unity 2022.3 avec le SDK3, le composant `Udon Behaviour` est l'interface unique pour attacher de la logique à un GameObject. Son inspecteur se divise en deux sections clés : la synchronisation réseau et la source du programme.
+
+| Option / Champ | Type d'élément | Rôle et Configuration Critique pour l'IA |
+| :--- | :--- | :--- |
+| **Synchronization** | Menu déroulant | Définit comment l'objet se synchronise entre les joueurs. <br>• **None** : Le script tourne en local pour chaque joueur.<br>• **Continuous** : Idéal pour les variables qui changent tout le temps (ex: la position/vitesse d'un surf ou véhicule).<br>• **Manual** : Idéal pour les interactions ponctuelles (ex: un bouton On/Off, une porte). |
+| **Program Source** | Slot d'Asset | Reçoit le fichier de script final compilé. Affiche `None (Abstract)` tant qu'aucun fichier n'est glissé dedans. |
+| **Sélecteur de Type** | Menu déroulant (bas) | Permet de choisir la méthode de programmation. Par défaut : `Udon Graph Program Asset` (programmation visuelle par nœuds). |
+| **Button "New Program"** | Bouton d'action | Crée et applique automatiquement un nouvel asset de script vierge basé sur le type sélectionné. |
+
