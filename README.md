@@ -47,3 +47,14 @@ Dans Unity 2022.3 avec le SDK3, le composant `Udon Behaviour` est l'interface un
 | **Sélecteur de Type** | Menu déroulant (bas) | Permet de choisir la méthode de programmation. Par défaut : `Udon Graph Program Asset` (programmation visuelle par nœuds). |
 | **Button "New Program"** | Bouton d'action | Crée et applique automatiquement un nouvel asset de script vierge basé sur le type sélectionné. |
 
+### 🔄 Inspecteur Udon Behaviour (Après initialisation du script)
+
+Une fois qu'un programme est créé (via le bouton `New Program`), l'interface d'Udon Behaviour se transforme pour laisser place aux outils d'édition et à la gestion des variables réseau.
+
+| Champ / Option | Type d'élément | Rôle et Configuration Critique pour l'IA |
+| :--- | :--- | :--- |
+| **Program Source** | Slot d'Asset | Contient désormais le fichier de script généré (ex: `Surfboard Udon Graph`). C'est le "cerveau" de l'objet. |
+| **Serialized Udon Program Asset** | Référence cachée | Code unique généré automatiquement par Unity pour l'interfaçage réseau de VRChat. Ne pas toucher. |
+| **Button "Open Udon Graph"** | Bouton large | L'accès principal. Ouvre la fenêtre de programmation visuelle par nœuds (Udon Graph Window) pour coder la logique. |
+| **Public Variables** | Section dynamique | **Zone cruciale.** C'est ici qu'apparaîtront les variables définies comme "publiques" dans le script (ex: Vitesse du surf, Hauteur de l'eau). Permet de régler les paramètres du véhicule directement depuis l'inspecteur sans rouvrir le script. |
+| **Compiled Graph Assembly** | Menu déroulant (Foldout) | Affiche le code assembleur textuel compilé pour VRChat. Utile uniquement pour le débogage de bas niveau. |
