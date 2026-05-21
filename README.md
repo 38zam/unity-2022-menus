@@ -244,3 +244,68 @@ Principalement utilisés pour les tests de bureau (Desktop Mode) dans l'éditeur
 * `OnParticleCollision` / `OnParticleSystemStopped` / `OnParticleTrigger` : Déclenché lorsqu'une particule (système Shuriken d'Unity) frappe un objet ou finit son cycle.
 * `OnTransformChildrenChanged` / `OnTransformParentChanged` : S'exécute si l'arborescence de l'objet est modifiée dynamiquement en jeu.
 * `OnValidate` / `Reset` : Événements exclusifs à l'éditeur Unity pour ranger ou corriger des valeurs de l'inspecteur.
+
+---
+
+### 📂 Sous-Menu : Special
+
+Ce sous-menu regroupe les structures de contrôle algorithmiques fondamentales de l'Udon Graph. C'est ici que l'on gère la logique conditionnelle (les choix), les répétitions (les boucles) et les annotations de la grille.
+
+#### 📋 Liste exhaustive des nœuds de contrôle de flux
+
+| Nom du Nœud dans l'Interface | Rôle Logique de la Fonction | Note Critique pour l'IA |
+| :--- | :--- | :--- |
+| **Branch** | **La condition de base (If / Else).** Dirige le flux d'exécution vers la sortie `True` ou `False` selon l'état d'une variable booléenne. | **Le nœud logique le plus utilisé.** Indispensable pour valider une action (ex: Si le joueur a la clé -> Ouvrir la porte). |
+| **Comment** | Génère un encadré textuel statique pour annoter la grille. | Sert uniquement à la documentation visuelle. Ce nœud n'a pas d'entrées/sorties de flux et est ignoré à la compilation. |
+| **For** | **Une boucle indexée (For Loop).** Répète l'exécution d'un bloc de nœuds un nombre défini de fois entre un index de début et de fin. | Utilisé pour traiter des listes d'éléments de taille fixe (ex: appliquer une modification à un tableau de 10 objets). |
+| **While** | **Une boucle conditionnelle (While Loop).** Exécute une action en boucle continue *tant que* la condition booléenne reste vraie. | **Risque de crash critique :** Si la condition ne passe pas à `False` pendant l'exécution de la boucle, Unity et VRChat plantent instantanément (boucle infinie). |
+
+---
+
+### 📂 Sous-Menu : UdonBehaviour
+
+Ce sous-menu est le pilier central de l'interactivité avancée et du réseau dans VRChat. Il regroupe toutes les méthodes permettant à un script Udon d'interagir avec un autre script situé sur le même objet ou sur un objet tiers de la scène.
+
+#### 📋 Liste exhaustive des nœuds de comportement et réseau
+
+| Nom du Nœud dans l'Interface | Rôle Logique de la Fonction | Note Critique pour l'IA |
+| :--- | :--- | :--- |
+| **UdonBehaviour.constructor** | Constructeur interne de l'instance du composant. | Pratiquement jamais appelé manuellement dans le graph. |
+| **UdonBehaviour.DisableInteractive** | Désactive la capacité du joueur à cliquer (Interagir) sur cet objet en jeu. | Idéal pour verrouiller temporairement un bouton ou une porte. |
+| **UdonBehaviour.EnableInteractive** | Réactive la capacité d'interaction physique pour le joueur. | Rend l'objet de nouveau cliquable via le pointeur VR/Souris. |
+| **UdonBehaviour.Equals** | Compare si la référence de ce script est identique à une autre. | Test d'égalité de référence standard. |
+| **UdonBehaviour.GetHashCode** | Renvoie l'identifiant numérique unique du composant en mémoire. | Utilisé pour l'indexation de bas niveau. |
+| **UdonBehaviour.GetProgramVariable** | **Lit la valeur d'une variable** se trouvant à l'intérieur d'un autre script Udon. | **Essentiel.** Permet de lier les systèmes (ex: lire le score d'un joueur géré par un script central). |
+| **UdonBehaviour.GetProgramVariableNames** | Extrait un tableau contenant tous les noms de variables publiques du script. | Utile pour l'analyse dynamique des scripts. |
+| **UdonBehaviour.GetProgramVariableType** | Récupère le type système (.NET) d'une variable spécifique via son nom. | Permet de sécuriser les conversions de données à la volée. |
+| **UdonBehaviour.GetType** | Renvoie le type système du composant UdonBehaviour lui-même. | Analyse de structure standard. |
+| **UdonBehaviour.Interact** | Force le déclenchement immédiat de l'événement d'interaction du script. | Permet de simuler par code le clic d'un joueur sur l'objet. |
+| **UdonBehaviour.SendCustomEvent** | **Exécute une fonction personnalisée (un événement nommé) locale.** | **Le nœud le plus important.** Déclenche un bloc logique à partir de son nom textuel. |
+| **UdonBehaviour.SendCustomNetworkEvent** | **Déclenche une fonction à travers le réseau Internet.** | **Crucial pour la synchro.** Permet de répercuter une action chez tous les joueurs de l'instance (ex: ouvrir une porte pour tout le monde). |
+| **UdonBehaviour.SetProgramVariable** | **Injecte/Modifie de force la valeur d'une variable** dans un autre script. | Équivalent du "Get", mais configuré pour l'écriture de données externes. |
+| **UdonBehaviour.ToString** | Convertit l'identité textuelle du composant en chaîne de caractères. | Utile pour formater des logs explicites dans la console. |
+
+*(Note : Les mentions d'événements comme OnOwnershipTransferred ou OnPlayerJoined visibles dans cette liste d'API sont des rappels de méthodes héritées de l'infrastructure Udon).*
+
+---
+
+### 📂 Sous-Menu : Type
+
+Ce sous-menu expose les méthodes d'analyse et d'inspection de types issues de la classe de réflexion native `System.Type` du framework .NET. Il permet à une IA de valider la nature, les propriétés et la structure des variables avant d'exécuter un traitement lourd.
+
+#### 📋 Liste exhaustive des nœuds d'analyse de type
+
+| Nom du Nœud dans l'Interface | Rôle Logique de la Fonction | Note Critique pour l'IA |
+| :--- | :--- | :--- |
+| **Type.Equals** | Évalue si deux types d'objets comparés sont rigoureusement identiques. | Sécurisation des embranchements algorithmiques dynamiques. |
+| **Type.GetConstructor** / **GetFields** / **GetMethods** / **GetProperties** | Inspecte et extrait les constructeurs, variables (champs), fonctions ou propriétés d'une classe. | Permet l'analyse et la lecture des structures de données complexes. |
+| **Type.GetInterface** / **GetInterfaces** / **GetNestedType(s)** | Récupère les interfaces logiques implémentées ou les classes imbriquées. | Analyse structurelle avancée de l'architecture du code. |
+| **Type.GetType** / **GetTypeCode** | Génère l'instance du type ou son code d'énumération système (ex: Int32, String). | Point d'entrée pour identifier de quel type de variable il s'agit. |
+| **Type.GetTypeHandle** / **GetTypeFromHandle** | Convertit le type vers ou depuis son pointeur de manipulation système (RuntimeTypeHandle). | Utilisé pour optimiser les comparaisons de bas niveau. |
+| **Type.IsArray** | Détermine avec certitude si la variable est un tableau de données (liste `[]`). | **Obligatoire** avant d'alimenter une boucle `For` pour éviter les plantages. |
+| **Type.IsAssignableFrom** | Détermine si une instance du type actuel peut recevoir et stocker le type spécifié. | Valide la compatibilité lors de l'héritage d'objets 3D ou logiques. |
+| **Type.IsClass** / **IsInterface** / **IsValueType** | Vérifie si la donnée est une classe de référence, un contrat logique ou une structure de valeur brute. | Indique à l'IA comment le moteur gère la donnée en mémoire vive. |
+| **Type.IsEnum** | Détecte si le type analysé est une énumération (une liste de choix à puces fixes). | Indispensable pour lire proprement les machines d'états de la map. |
+| **Type.IsPointer** / **IsPrimitive** / **IsPublic** | Détecte les variables de type pointeur direct, les données numériques de base (int, float) ou leur visibilité globale. | Filtres d'analyse de sécurité pour le compilateur. |
+| **Type.ToString** | Convertit le type en une chaîne de caractères lisible (ex: `"UnityEngine.Transform"`). | Permet d'afficher textuellement la nature d'une erreur dans la console. |
+
