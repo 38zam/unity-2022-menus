@@ -58,3 +58,31 @@ Une fois qu'un programme est créé (via le bouton `New Program`), l'interface d
 | **Button "Open Udon Graph"** | Bouton large | L'accès principal. Ouvre la fenêtre de programmation visuelle par nœuds (Udon Graph Window) pour coder la logique. |
 | **Public Variables** | Section dynamique | **Zone cruciale.** C'est ici qu'apparaîtront les variables définies comme "publiques" dans le script (ex: Vitesse du surf, Hauteur de l'eau). Permet de régler les paramètres du véhicule directement depuis l'inspecteur sans rouvrir le script. |
 | **Compiled Graph Assembly** | Menu déroulant (Foldout) | Affiche le code assembleur textuel compilé pour VRChat. Utile uniquement pour le débogage de bas niveau. |
+
+---
+
+## 🧱 L'Interface de l'Éditeur Udon Graph (Unity 2022.3)
+
+La fenêtre `Udon Graph` est l'environnement de développement visuel officiel pour VRChat. Elle se compose d'une grille de canvas centrale (dotée du filigrane UDON) et de menus contextuels spécifiques.
+
+### 🎛️ 1. La Barre d'Outils Supérieure (Top Bar)
+
+Située juste au-dessus de la grille de programmation, elle gère l'état global et la compilation du script :
+
+| Bouton / Champ | Valeur par défaut | Rôle et Utilité pour l'IA |
+| :--- | :--- | :--- |
+| **Update Order** | `0` | Champ numérique. Définit l'ordre de priorité d'exécution de ce script par rapport aux autres scripts Udon de la scène. |
+| **Highlight Flow** | Désactivé | Bouton à bascule. En mode Play, il illumine visuellement les connexions entre les nœuds pour suivre le flux d'exécution en temps réel (Débogage). |
+| **Compile** | Actionneur | Force la réévaluation et la compilation des nœuds visuels en code assembleur VRChat Machine. |
+| **Reload** | Actionneur | Recharge l'asset du graph depuis le disque dur en cas de désynchronisation ou de conflit de fichier. |
+| **Indicateur de statut (OK)** | `OK` (Vert) | Pastille de validation. Reste verte si le graph est fonctionnel. Devient rouge avec le décompte des erreurs si un nœud est mal connecté ou si une variable est manquante. |
+
+### 📁 2. Le Panneau Latéral Gauche (Sidebar)
+
+Ce panneau permet de déclarer les composants logiques qui alimenteront les nœuds du graph :
+
+* **Search (Barre de recherche) :** Permet de filtrer rapidement les variables, événements ou groupes créés dans le script.
+* **Variables (Bouton `+`) :** Permet de créer des données de tout type (ex: `float` pour la vitesse, `Rigidbody` pour la physique du surf, `VRCPlayerApi` pour détecter le pilote). C'est en cochant l'option *Public* ici qu'elles apparaissent dans l'inspecteur Unity.
+* **Events (Bouton `+`) :** Permet d'ajouter rapidement des événements système natifs de VRChat (ex: `OnPlayerJoined`, `OnPickup`, `OnStationEntered`).
+* **Groups (Bouton `+`) :** Permet de créer des cadres de couleur nommés pour trier, documenter et regrouper visuellement les paquets de nœuds dans la grille.
+* 
