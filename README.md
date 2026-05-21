@@ -309,3 +309,114 @@ Ce sous-menu expose les méthodes d'analyse et d'inspection de types issues de l
 | **Type.IsPointer** / **IsPrimitive** / **IsPublic** | Détecte les variables de type pointeur direct, les données numériques de base (int, float) ou leur visibilité globale. | Filtres d'analyse de sécurité pour le compilateur. |
 | **Type.ToString** | Convertit le type en une chaîne de caractères lisible (ex: `"UnityEngine.Transform"`). | Permet d'afficher textuellement la nature d'une erreur dans la console. |
 
+---
+
+### 📂 Sous-Menu : VRC (Racine du SDK VRChat)
+
+Ce sous-menu regroupe l'intégralité des classes et fonctions spécifiques à l'écosystème VRChat. Contrairement aux dossiers précédents issus d'Unity ou du langage C#, ces nœuds servent exclusivement à piloter les fonctionnalités internes du jeu et l'infrastructure réseau des instances.
+
+#### 🗺️ Les 3 branches majeures de l'API VRChat
+
+| Dossier Racine | Rôle Global dans l'Infrastructure | Importance pour le Contextage IA |
+| :--- | :--- | :--- |
+| **VRC.Core** | Gestion système interne. | Contient les briques fondamentales et les pipelines de données de bas niveau du jeu. Généralement peu manipulé en Udon Graph direct. |
+| **VRC.SDK3** | **Composants d'interaction et Joueurs.** | **Le dossier le plus important.** Regroupe la gestion des joueurs (`VRCPlayerApi`), l'accès aux stations (sièges), aux miroirs VRChat, et aux nouveaux outils de conteneurs de données (`VRCDataList`, `VRCDataDictionary`). |
+| **VRC.Udon** | Moteur d'exécution Udon. | Gère l'encapsulation logicielle et les ponts de communication réseau génériques propres à la machine virtuelle Udon. |
+
+# 🛠️ Index Général de l'API UnityEngine (Udon Graph)
+
+Ce guide centralise l'intégralité des classes, structures et composants natifs d'Unity exposés dans le SDK VRChat. Contrairement aux menus spécifiques à VRChat, cette bibliothèque gère les fondations du moteur de jeu : la physique 3D, le rendu visuel, les calculs mathématiques, les sons et les systèmes d'animation standard.
+
+---
+
+## 📂 Branche Racine : UnityEngine (Index Alpha-Numérique)
+
+### 🅰️ Section A : Accéléromètre, Android, Animations et Audio
+
+| Nom de la Classe / Namespace | Rôle Logique dans le Moteur | Utilité et Contexte pour l'IA |
+| :--- | :--- | :--- |
+| **AccelerationEvent** | Capture les données physiques de l'accéléromètre de l'appareil. | Lié aux mouvements physiques (Utile pour des mécaniques mobiles spécifiques). |
+| **Android** | Fonctions et passerelles dédiées à la plateforme mobile Android. | **Indispensable pour l'optimisation Quest.** Permet d'isoler du code propre à la version autonome (Meta Quest). |
+| **Animation...** (`AnimationClip`, `Curve`, `State`) | Composants du système d'animation historique (Legacy) d'Unity. | Permet de lire des états d'animation simples ou de manipuler des courbes temporelles. |
+| **Animator...** (`ClipInfo`, `Parameter`, `StateInfo`) | **Moteur d'animation Mecanim.** Gère les machines à états et les transitions complexes. | **Crucial pour l'interactivité.** Permet à l'IA de modifier les paramètres d'un Animator (ex: ouvrir une porte, lancer une cinématique). |
+| **Application** | Accès aux métadonnées globales de l'instance de jeu en cours d'exécution. | Permet de vérifier le statut de la plateforme ou de la connexion locale. |
+| **AudioClip** | Représente une ressource ou un fichier audio brut (WAV, MP3, OGG). | Permet de stocker ou d'assigner dynamiquement un son à un haut-parleur par script. |
+| **Audio...Filter** (`Distortion`, `Echo`, `LowPass`) | Filtres d'effets acoustiques en temps réel applicables sur les flux sonores. | **Essentiel pour l'ambiance.** Simule des environnements réalistes (ex: écho dans une grotte, filtre passe-bas derrière un mur). |
+
+---
+
+### 🇨 Section C : Cinemachine, Collideurs et Couleurs
+
+| Nom de la Classe / Namespace | Rôle Logique dans le Moteur | Utilité et Contexte pour l'IA |
+| :--- | :--- | :--- |
+| **Cinemachine...** (`DollyCart`, `Path`, `VirtualCamera`) | Système de caméras intelligentes et de suivis de trajectoires. | **Le top pour les cinématiques.** Permet de piloter des caméras fluides le long d'un rail (`Path`) pour des intros de map ou des modes spectateur. |
+| **Cloth** | Gère les simulations physiques de tissus (vêtements, drapeaux). | Permet d'interagir par code avec les contraintes physiques des tissus sur la map. |
+| **Collider** / **Collider2D** | Base de toutes les formes physiques de collision 3D / 2D (Box, Sphere, Mesh). | **La base des interactions.** Permet de détecter quand un joueur ou un objet entre dans une zone (`OnTriggerEnter`). |
+| **Collision** / **Collision2D** | Contient toutes les données générées lors d'un impact physique (vitesse, points d'impact). | Permet de calculer les dégâts d'un impact ou de faire rebondir des objets de manière réaliste. |
+| **Color** / **Color32** | Représentation mathématique des couleurs (RGBA ou valeurs 0-255). | Permet de changer dynamiquement la couleur d'une lumière, d'une interface UI ou d'un matériau. |
+| **Component** | Classe mère de tout ce qui s'attache à un objet dans la hiérarchie d'Unity. | Permet de rechercher et manipuler les scripts ou composants reliés à un objet. |
+| **Coroutine** | Permet de mettre un script en pause et d'attendre un certain temps avant de continuer. | Gérée de façon spécifique via les événements `SendCustomEventDelayed` dans Udon. |
+| **Debug** | Contient les outils d'affichage de logs dans la console de développement. | **Essentiel pour le débuggage.** Permet d'écrire des messages de suivi (`Debug.Log`) visibles dans l'UdonLog ou le Creator Companion. |
+
+---
+
+### 🇩 Section D à F : Moteur Physique, Affichage et Joints
+
+| Nom de la Classe / Namespace | Rôle Logique dans le Moteur | Utilité et Contexte pour l'IA |
+| :--- | :--- | :--- |
+| **Display** | Gère les moniteurs d'affichage et la gestion multi-écrans. | Utilité limitée en VR, sert principalement pour les configurations d'affichage PC de bas niveau. |
+| **DrivenRectTransformTracker** | Verrouille et pilote les dimensions des éléments d'interface UI. | Utilisé de façon interne par Unity pour stabiliser la mise en page automatique des menus. |
+| **DynamicGI** | Contrôle l'Illumination Globale dynamique (lumières indirectes en temps réel). | Permet de modifier par code l'intensité des reflets de lumière précalculés sur les surfaces mobiles. |
+| **FixedJoint** / **FixedJoint2D** | Joint physique qui attache rigidement deux corps physiques ensemble. | Utile pour lier deux objets (ex: créer un wagon détachable ou assembler des pièces mécaniques). |
+| **Flare** / **FlareLayer** | Gère les effets d'éblouissement optique (Lens Flares) provoqués par les sources lumineuses. | Permet d'activer ou désactiver les effets de halo de lumière directement sur la caméra. |
+| **Font** | Représente les polices de caractères utilisées pour l'affichage de textes standard. | Permet de changer dynamiquement la typographie d'un panneau d'affichage textuel. |
+
+---
+
+### 🇬 Section G à H : GameObjects, Graphismes et Squelettes
+
+| Nom de la Classe / Namespace | Rôle Logique dans le Moteur | Utilité et Contexte pour l'IA |
+| :--- | :--- | :--- |
+| **GameObject** | **L'entité fondamentale de base d'Unity.** Tout objet présent sur la scène en est un. | **Nœud ultra-utilisé.** Permet d'activer/désactiver un objet (`SetActive`), de l'instancier ou de détruire un élément du décor. |
+| **Gizmos** | Dessine des formes d'aide visuelle directement dans la vue Scène d'Unity. | Permet aux créateurs de visualiser des zones de déclenchement ou des chemins invisibles en jeu. |
+| **Gradient** | Gère une transition fluide entre plusieurs couleurs successives. | Idéal pour créer des effets visuels évolutifs, comme une jauge de vie qui passe du vert au rouge. |
+| **Graphics** | Commandes graphiques de bas niveau pour dessiner directement des textures ou des meshes. | Utilisé pour optimiser l'affichage ou manipuler des buffers d'effets visuels avancés. |
+| **Gyroscope** | Capte les données de rotation spatiale de l'appareil mobile. | Principalement exploité pour adapter des contrôles spécifiques sur les supports mobiles autonomes. |
+| **HingeJoint** / **HingeJoint2D** | Joint physique de type "charnière" (axe de rotation pivotant libre). | **Idéal pour la physique.** Permet de concevoir des portes physiques réalistes, des roues ou des leviers à actionner. |
+| **HumanBone** / **HumanPose...** | Structures de données décrivant l'armature humanoïde et l'état de sa pose. | Lié à la configuration anatomique des avatars ou des mannequins interactifs dans le monde. |
+
+---
+
+### 🇮 Section I à L : Inputs, Lumières et Calques
+
+| Nom de la Classe / Namespace | Rôle Logique dans le Moteur | Utilité et Contexte pour l'IA |
+| :--- | :--- | :--- |
+| **Input** / **InputSystem** | Gère la lecture des actions de l'utilisateur (clavier, souris, manettes VR). | Permet de détecter si un joueur appuie sur une touche spécifique pour activer une lampe de poche ou un menu. |
+| **Joint** / **JointLimits** | Classes génériques de gestion des liaisons physiques articulées. | Définissent les angles limites et l'élasticité des liaisons de corps physiques (ex: élastiques, cordes). |
+| **LayerMask** | Système de filtrage basé sur les calques (Layers) de la scène. | **Crucial pour l'optimisation des lancers de rayons.** Permet d'ignorer certains objets lors d'un calcul de tir laser. |
+| **Light** | Contrôle l'intégralité des sources lumineuses (Directionnelle, Point, Spot). | Permet d'allumer/éteindre une lampe, de modifier sa couleur ou d'ajuster l'intensité de l'éclairage de la map. |
+| **LightmapSettings** / **LightProbes** | Gère les données de rendu et d'éclairage statique précalculé (Baked Lighting). | Permet de modifier l'ambiance lumineuse générale ou d'appliquer des préréglages de rendu globaux. |
+
+---
+
+### 🇲 Section M à P : Meshes, Matériaux, Mathématiques et Physique
+
+| Nom de la Classe / Namespace | Rôle Logique dans le Moteur | Utilité et Contexte pour l'IA |
+| :--- | :--- | :--- |
+| **LineRenderer** | Dessine une ligne continue en 3D reliant une série de coordonnées spatiales. | Idéal pour tracer des lasers d'armes, des trajectoires de téléportation ou des lignes de dessin 3D. |
+| **LODGroup** | Gère le niveau de détail (Level of Detail) des modèles 3D selon la distance de la caméra. | Crucial pour l'optimisation des performances des gros éléments de décor. |
+| **Material** | Définit l'apparence visuelle d'une surface 3D (Couleur, texture, propriétés de brillance). | Permet de changer l'aspect d'un mur ou d'un objet en plein jeu (ex: faire fondre de la glace en changeant son shader). |
+| **Mathf** | **Bibliothèque complète de fonctions mathématiques.** (Sinus, Cosinus, Lerp, Clamp...). | **Le moteur des animations par code.** Permet de calculer des trajectoires fluides, de limiter des valeurs ou de créer des oscillations. |
+| **Mesh** / **MeshFilter** / **MeshRenderer** | Contient la géométrie 3D brute (les triangles) et s'occupe de l'afficher à l'écran. | Permet de remplacer dynamiquement la forme 3D d'un objet (ex: transformer un cube en sphère par script). |
+| **Microphone** | Gère la capture audio des périphériques d'enregistrement locaux. | Soumis aux restrictions de sécurité de VRChat, la voix passant principalement par le système audio VRChat natif. |
+| **ParticleSystem** | **Moteur de particules d'Unity (Shuriken).** Gère les effets visuels fluides. | Permet de déclencher par script des feux d'artifice, de la fumée, des explosions ou des effets magiques. |
+| **Physics** | **Moteur de simulation physique 3D globale.** (Gravité, lancers de rayons). | **Contient le nœud indispensable `Physics.Raycast`.** Permet de simuler des tirs d'armes, de détecter ce que regarde le joueur ou de mesurer les distances. |
+| **PlayerPrefs** | Système de stockage local persistant de données sur la machine de l'utilisateur. | Dans VRChat, son comportement est encadré pour éviter la triche; on lui préfère souvent la persistance native de VRChat. |
+
+---
+
+### 🇶 Section Q à S : Rotations, Écrans et Shaders
+
+| Nom de la Classe / Namespace | Rôle Logique dans le Moteur | Utilité et Contexte pour l'IA |
+| :--- | :--- | :--- |
+| **Quaternion** | Structure mathématique complexe dédiée au calcul des rotations 3D (sans blocage de cardan). | **Indispensable pour orient
