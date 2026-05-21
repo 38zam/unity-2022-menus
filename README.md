@@ -86,3 +86,53 @@ Ce panneau permet de déclarer les composants logiques qui alimenteront les nœu
 * **Events (Bouton `+`) :** Permet d'ajouter rapidement des événements système natifs de VRChat (ex: `OnPlayerJoined`, `OnPickup`, `OnStationEntered`).
 * **Groups (Bouton `+`) :** Permet de créer des cadres de couleur nommés pour trier, documenter et regrouper visuellement les paquets de nœuds dans la grille.
 * 
+---
+
+## 📂 Cartographie des Sous-Menus Contextuels de l'Udon Graph
+
+Pour naviguer et générer du code sans hallucination, une IA doit connaître l'arborescence des trois menus pop-ups principaux de l'interface graphique.
+
+### ➕ A. Le Sous-Menu "Variables" (Bouton +)
+Lors d'un clic sur le `+` de la section Variables, un menu déroulant textuel s'ouvre avec une barre de recherche pour typer la donnée. Les catégories majeures sont :
+
+* **System :** Regroupe les types de base (C# natif).
+    * *Sous-menus fréquents :* `Boolean`, `String`, `Int32`, `Single` (float), `Char`.
+* **UnityEngine :** Regroupe tous les composants physiques et visuels d'Unity.
+    * *Sous-menus fréquents :* `GameObject`, `Transform`, `Rigidbody`, `Collider`, `MeshRenderer`, `Material`, `Vector3`.
+* **VRC / VRChat :** Types spécifiques au SDK.
+    * *Sous-menus fréquents :* `VRCPlayerApi` (gestion des joueurs), `VRCUrl` (liens vidéos/images).
+
+### ➕ B. Le Sous-Menu "Events" (Bouton +)
+Lors d'un clic sur le `+` de la section Events, un menu rapide propose d'injecter directement les nœuds d'événements pré-configurés :
+
+* **OnStationEntered / OnStationExited :** Se déclenche quand un joueur s'assied ou se lève d'une station.
+* **OnPlayerJoined / OnPlayerLeft :** Se déclenche à l'entrée/sortie d'un utilisateur dans l'instance.
+* **OnOwnershipTransferred :** Se déclenche quand la synchronisation réseau d'un objet change de propriétaire.
+* **OnPickup / OnDrop / OnPickupUseUp / OnPickupUseDown :** Événements liés aux objets saisissables (manettes/VR).
+
+### 🖱️ C. Le Menu Master "Create Node" (Clic Droit ou Touche Espace sur la Grille)
+C'est le catalogue absolu de toutes les fonctions disponibles. Il s'ouvre sous forme de panneau flottant au milieu de la grille avec une structure en arbre :
+
+1. **Barre de Recherche supérieure :** Filtre instantanément les milliers de fonctions de l'API Unity/VRChat.
+2. **Arborescence des dossiers (Sous-menus) :**
+    * 📂 `Events` : Contient les fonctions de cycle de vie de base (`Start`, `Update`, `FixedUpdate`).
+    * 📂 `Special` : Contient les structures de contrôle algorithmiques (`Anys`, `Comment`, `Identity`).
+    * 📂 `System` : Opérations mathématiques de base et gestion des variables.
+    * 📂 `UnityEngine` : Accès complet aux méthodes de chaque composant Unity (ex: `Transform.Rotate`, `GameObject.SetActive`).
+    * 📂 `VRC` : Fonctions réseau globales (ex: `Networking.LocalPlayer`, `UdonBehaviour.SendCustomEvent`).
+  
+    * ### 🖱️ C. Le Menu Contextuel de la Grille (Clic Droit)
+
+Lors d'un clic droit n'importe où sur l'espace quadrillé vide de l'Udon Graph, ce menu flottant apparaît pour gérer l'édition et l'arborescence :
+
+| Option de Menu | Fonctionnalité Globale | Utilité Critique pour le Contextage IA |
+| :--- | :--- | :--- |
+| **Create Group** | Organisation visuelle | Crée une boîte de couleur redimensionnable pour regrouper un ensemble de nœuds sous un même titre. |
+| **Create Comment** | Documentation | Génère un nœud de texte flottant (sans entrées/sorties logiques) pour annoter le fonctionnement d'une zone du script. |
+| **Create Node** | Accès à l'API | **L'option la plus importante.** Ouvre la boîte de recherche universelle contenant toutes les fonctions d'Unity et de VRChat. |
+| **Cut** | Édition standard | Coupe les nœuds actuellement sélectionnés dans le presse-papier. |
+| **Copy** | Édition standard | Copie les nœuds sélectionnés. |
+| **Paste** | Édition standard | Colle les nœuds du presse-papier à l'emplacement actuel de la souris. |
+| **Delete** | Édition standard | Supprime définitivement les nœuds sélectionnés du graph. |
+| **Duplicate** | Édition rapide | Duplique à la volée les nœuds sélectionnés en conservant leurs liens internes et leurs paramètres. |
+
