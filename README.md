@@ -420,3 +420,36 @@ Ce guide centralise l'intégralité des classes, structures et composants natifs
 | Nom de la Classe / Namespace | Rôle Logique dans le Moteur | Utilité et Contexte pour l'IA |
 | :--- | :--- | :--- |
 | **Quaternion** | Structure mathématique complexe dédiée au calcul des rotations 3D (sans blocage de cardan). | **Indispensable pour orient
+
+# 🌐 Index Spécifique au SDK VRChat (Namespace : VRC)
+
+Cette section regroupe l'intégralité des composants natifs créés par VRChat pour orchestrer la logique interne du jeu. C'est ici que l'on gère l'interactivité physique des joueurs (saisir un objet, s'asseoir), la synchronisation réseau des positions et les outils de requêtes internet.
+
+---
+
+## 📂 Branche Racine : VRC (De A à Z)
+
+### 🫳 Pickups, Stations et Interactions Physiques
+
+| Nom de la Classe / Namespace | Rôle Logique dans le Moteur | Utilité et Contexte pour l'IA |
+| :--- | :--- | :--- |
+| **VRC_Pickup** | **Gestion des objets saisissables.** Gère le comportement d'un objet qu'un joueur peut prendre en main (pistolet, clé, miroir portable). | **La base du gameplay.** Permet à l'IA de savoir si un objet est tenu (`isHeld`), par quelle main, de forcer le joueur à le lâcher (`Drop`), ou de modifier la force de lancer. |
+| **VRC_Pickup.AutoHoldMode** | Énumération définissant comment le joueur maintient l'objet (Bouton enfoncé, ou un clic pour prendre / un clic pour lâcher). | Permet de configurer l'ergonomie de prise en main des outils du monde selon les préférences de confort VR. |
+| **VRC_Station** | **Gestion des sièges et des véhicules.** Gère l'immobilisation d'un joueur à un emplacement précis (chaise, cabine de pilotage). | **Crucial pour l'immersion.** Permet d'attacher un joueur à un endroit (`UseStation`), de l'en éjecter, d'interdire la sortie manuelle ou de suivre s'il est assis via les événements de callback. |
+| **VRC_ObjectSync** | **Synchronisation des objets en réseau.** Aligne automatiquement la position, la rotation et la physique (Rigidbody) d'un objet pour tous les joueurs de l'instance. | **Indispensable en multijoueur.** Permet à l'IA de forcer la resynchronisation d'un objet synchrone égaré ou de réinitialiser sa position d'origine (`FlagDiscontinuity`). |
+| **VRC_ObjectSpawn** / **Spawner** | Gère la génération dynamique et la réinitialisation d'objets précis dans la scène. | Permet de concevoir des systèmes de combat (apparition de projectiles/monstres) ou de réinitialiser automatiquement un mini-jeu. |
+
+---
+
+### 🔊 Audio Spatial, Matériel et Liens Web (Outils Avancés)
+
+| Nom de la Classe / Namespace | Rôle Logique dans le Moteur | Utilité et Contexte pour l'IA |
+| :--- | :--- | :--- |
+| **VRC_SpatialAudioSource** | Composant de spatialisation acoustique 3D exclusif à VRChat. | **Essentiel pour l'immersion sonore.** Permet à l'IA de modifier dynamiquement la portée d'un son, d'activer le gain spatialisé, ou de simuler une occlusion (son étouffé à travers les murs). |
+| **VRCUrl** | Structure encapsulant un lien URL internet de manière sécurisée. | **Le pilier des médias.** Indispensable pour injecter des liens dans les lecteurs vidéo (Video Players) ou pour utiliser le système de téléchargement de données externes. |
+| **VRCStringDownloader** | Outil de requêtes HTTP permettant de télécharger du texte brut depuis internet en temps réel. | Permet à l'IA de charger des listes de modération à distance, des tableaux de scores mondiaux, ou des messages d'actualités mis à jour sans republier le monde. |
+| **VRCImageDownloader** | Système de téléchargement d'images distantes sur des bannières ou des textures en jeu. | Idéal pour afficher des artworks changeants, des avatars de contributeurs ou des textures de décoration dynamiques. |
+| **VRCInputMethod** | Énumération identifiant le périphérique d'entrée actuel du joueur (Souris/Clavier, Manettes VR, Écran tactile Mobile). | **Optimisation de l'ergonomie.** Permet à l'IA de détecter si un joueur est sur mobile ou sur PC afin d'adapter la taille des menus UI et la disposition des boutons. |
+| **VRCGraphics** / **VRCShader** | Passerelles sécurisées permettant d'exécuter des calculs graphiques (Blit de textures) ou de modifier des variables de shaders globales. | Permet de créer des effets visuels synchronisés à l'échelle du monde ou de manipuler des rendus de caméras de surveillance de façon sécurisée. |
+| **VRC_SceneDescriptor** | Le centre de contrôle général de la carte (World Settings). | Définit la hauteur à laquelle les objets/joueurs réapparaissent s'ils tombent dans le vide (`RespawnHeight`) et gère les points de réapparition initiaux. |
+| **VRCVelocityTracker** | **Suivi des vecteurs de force et de vitesse.** Calcule en temps réel la vitesse linéaire et angulaire d'un élément. | **Idéal pour la précision physique.** Permet à l'IA de suivre précisément l'accélération d'un véhicule, de calculer la force de lancer d'un projectile personnalisé ou de déclencher des effets visuels (VFX) uniquement quand un objet dépasse une certaine vitesse. |
