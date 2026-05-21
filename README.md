@@ -136,3 +136,111 @@ Lors d'un clic droit n'importe où sur l'espace quadrillé vide de l'Udon Graph,
 | **Delete** | Édition standard | Supprime définitivement les nœuds sélectionnés du graph. |
 | **Duplicate** | Édition rapide | Duplique à la volée les nœuds sélectionnés en conservant leurs liens internes et leurs paramètres. |
 
+---
+
+## 🔍 La Fenêtre "Create Node" (Quick Search)
+
+C'est le catalogue universel des fonctions d'Udon. Cette interface se compose d'un champ de saisie dynamique (`Quick Search`) pour filtrer l'API à la volée, et d'une structure fixe divisée en 8 grandes catégories de nœuds.
+
+### 📂 L'Arborescence Racine de l'API Udon
+
+| Catégorie Racine | Rôle Global et Contenu pour l'IA |
+| :--- | :--- |
+| **Debug** | Gère la journalisation et le débogage. Contient les fonctions pour envoyer des messages, alertes ou erreurs directement dans la console Unity (`Log`, `LogError`, `LogWarning`). |
+| **Events** | Contient uniquement les événements de base liés au cycle de vie d'un script standard (ex: `Start`, `Update`, `LateUpdate`, `FixedUpdate`). |
+| **Special** | **Crucial pour la logique.** Regroupe les structures de contrôle algorithmiques : les conditions (`Branch`), les boucles (`For`, `While`), le nœud de commentaire interne, et les opérations logiques pures. |
+| **System** | Donne accès aux fonctionnalités natives du langage C# (hors Unity) : opérations mathématiques de base (`Mathf`), manipulation de textes (`String`), de dates (`DateTime`) ou de listes (`Array`). |
+| **Type** | Regroupe les opérateurs permettant d'analyser, de comparer ou de convertir les types de variables entre eux (`Cast`, `Get Type`). |
+| **UdonBehaviour** | Gère la communication inter-scripts. Permet à un script Udon d'interagir avec un autre (ex: appeler une fonction personnalisée via `SendCustomEvent` ou modifier une variable sur un autre objet). |
+| **UnityEngine** | **La catégorie la plus dense.** Contient l'intégralité des composants officiels d'Unity validés par VRChat. C'est ici qu'on trouve la gestion des mouvements (`Transform`), l'activation d'objets (`GameObject`), le son (`AudioSource`) ou les animations (`Animator`). |
+| **VRC** | L'API exclusive de VRChat. Contrôle tout ce qui est lié à l'infrastructure du jeu : la gestion des joueurs (`VRCPlayerApi`), la synchronisation des données en réseau (`Networking`), et les interactions VR de la map. |
+
+---
+
+### 📂 Sous-Menu : Debug
+
+Ce sous-menu liste toutes les méthodes de la classe native `Debug` d'Unity approuvées par le compilateur Udon VRChat. Elles servent principalement au traçage d'informations dans la console d'Unity et au dessin de repères visuels dans la vue Scene.
+
+#### 📋 Liste exhaustive des nœuds de débogage disponibles
+
+| Nom du Nœud dans l'Interface | Rôle Logique de la Fonction | Note Critique pour l'IA |
+| :--- | :--- | :--- |
+| **Debug.Assert** | Évalue une condition et logue une erreur si elle est fausse. | Utile pour valider la présence de composants requis au démarrage. |
+| **Debug.AssertFormat** | Version formatée de l'assertion (`String.Format`). | Permet d'injecter des variables dynamiques dans l'erreur d'assertion. |
+| **Debug.constructor** | Constructeur interne de la classe. | Pratiquement jamais utilisé dans l'Udon Graph standard. |
+| **Debug.DebugBreak** | Met l'éditeur Unity en pause au frame actuel. | Idéal pour figer la physique de la map et inspecter l'état des GameObjects. |
+| **Debug.DrawLine** | Dessine une ligne colorée temporaire entre deux coordonnées. | Visible uniquement dans la vue `Scene` de l'éditeur (invisible en jeu). |
+| **Debug.DrawRay** | Dessine un rayon à partir d'un point d'origine et d'un vecteur. | Très utile pour visualiser le comportement des Raycasts (ex: détection du sol). |
+| **Debug.Equals** | Compare l'égalité de deux instances de l'objet. | Fonction de comparaison standard héritée du système C#. |
+| **Debug.GetHashCode** | Renvoie le code de hachage de l'instance. | ID numérique unique utilisé par le moteur de rendu. |
+| **Debug.GetType** | Renvoie le type exact de la variable ou du composant. | Permet aux scripts de vérifier la nature d'un composant récupéré dynamiquement. |
+| **Debug.Log** | **Envoie un message classique (texte blanc) dans la console.** | **Le nœud le plus utilisé.** Indispensable pour afficher la valeur d'une variable. |
+| **Debug.LogAssertion** | Envoie un log d'assertion personnalisé à la console. | Apparaît avec une icône spécifique dans l'éditeur Unity. |
+| **Debug.LogAssertionFormat** | Version formatée du log d'assertion. | Structure textuelle avancée. |
+| **Debug.LogError** | **Envoie un message d'erreur (texte rouge) dans la console.** | À déclencher quand un script échoue (ex: cible réseau introuvable). |
+| **Debug.LogErrorFormat** | Version formatée de la notification d'erreur. | Permet de construire des rapports d'erreur complexes et lisibles. |
+| **Debug.LogException** | Logue une exception de programmation brute dans la console. | Intercepte et affiche les erreurs système de bas niveau. |
+| **Debug.LogFormat** | Version formatée du log blanc standard. | Permet d'écrire des chaînes propres comme `"Vitesse : {0} m/s"`. |
+| **Debug.LogWarning** | **Envoie un avertissement (texte jaune) dans la console.** | À utiliser pour un comportement inattendu mais non bloquant pour le joueur. |
+| **Debug.LogWarningFormat** | Version formatée du log jaune d'avertissement. | Permet de lister proprement plusieurs paramètres suspects. |
+| **Debug.Tostring** | Convertit l'état interne de la classe Debug en chaîne. | *Note de syntaxe UI :* Écrit textuellement avec un "s" minuscule dans le menu Udon. |
+
+---
+
+### 📂 Sous-Menu : Events
+
+Ce sous-menu indispensable contient tous les nœuds de type "Événement" natifs d'Unity. Ils servent de points d'entrée (Triggers) dans l'Udon Graph. Un script commence toujours son exécution par l'un de ces nœuds lorsqu'une condition moteur ou physique est remplie.
+
+#### 🔄 1. Événements de Cycle de Vie du Script (Moteur Global)
+Ces événements gèrent la vie de base du script, de sa naissance à sa destruction sur la map.
+
+| Nom du Nœud | Moment Exact de Déclenchement | Utilité Majeure pour l'IA |
+| :--- | :--- | :--- |
+| **Event_Custom** | Appelé manuellement par un nom de chaîne (String). | Permet de créer des fonctions personnalisées réutilisables. |
+| **Start** | Une seule fois, juste avant la première mise à jour (Frame). | Initialisation des variables, récupération des composants. |
+| **Update** | À chaque frame (calcul d'affichage variable). | Calculs réguliers, minuteurs, animations fluides locales. |
+| **FixedUpdate** | À intervalle de temps régulier fixe (physique). | **Obligatoire** pour appliquer des forces ou modifier la vélocité. |
+| **LateUpdate** | À chaque frame, *après* que tous les `Update` soient finis. | Idéal pour le suivi de caméra pour éviter les saccades. |
+| **OnEnable** | Chaque fois que le GameObject passe de masqué à actif. | Réinitialisation ou redémarrage d'une logique visuelle. |
+| **OnDisable** | Chaque fois que le GameObject est désactivé (décoché). | Coupure de sons, arrêt de scripts en arrière-plan. |
+| **OnDestroy** | Juste avant que l'objet ne soit définitivement supprimé. | Nettoyage des données en mémoire pour éviter les fuites. |
+
+#### 💥 2. Événements de Physique et de Collision (3D)
+Déclenchés par le moteur physique d'Unity (Nvidia PhysX) lors des contacts dans l'espace 3D.
+
+| Catégorie | Nœuds Disponibles | Condition de Déclenchement |
+| :--- | :--- | :--- |
+| **Colliders Solides** | `OnCollisionEnter`<br>`OnCollisionStay`<br>`OnCollisionExit` | Déclenché quand un objet solide avec un Rigidbody en percute un autre (ex: une balle rebondit sur un mur). |
+| **Zones Intangibles (Triggers)** | `OnTriggerEnter`<br>`OnTriggerStay`<br>`OnTriggerExit` | Déclenché quand un objet traverse une zone invisible (ex: une zone de téléportation ou l'ouverture automatique d'une porte). |
+| **Physique 2D** | `OnCollisionEnter2D` / `Stay2D` / `Exit2D`<br>`OnTriggerEnter2D` / `Stay2D` / `Exit2D` | Équivalents physiques réservés exclusivement aux projets utilisant le moteur 2D d'Unity. |
+| **Articulations** | `OnJointBreak`<br>`OnJointBreak2D` | Se lance si une contrainte physique (`Joint`) reliant deux objets se brise sous une force excessive. |
+| **Contrôleurs** | `OnControllerColliderHit` | Spécifique au composant `CharacterController`, détecte si le joueur marche sur un obstacle physique. |
+
+#### 👁️ 3. Événements de Rendu Graphique et de Caméra
+Liés directement à ce que la caméra du joueur voit ou à la façon dont la carte dessine les objets.
+
+| Nom du Nœud | Condition de Déclenchement | Note d'Optimisation IA |
+| :--- | :--- | :--- |
+| **OnBecameVisible** | L'objet entre dans le champ de vision d'une caméra. | Permet d'activer un script gourmand uniquement quand on le regarde. |
+| **OnBecameInvisible** | L'objet sort complètement de la vue de toutes les caméras. | Permet de couper les calculs visuels pour économiser les FPS de la map. |
+| **OnPreCull** / **OnPreRender** | Avant que la caméra ne trie ou ne commence à dessiner la scène. | Réservé aux scripts de rendu avancés de bas niveau. |
+| **OnPostRender** / **OnRenderImage** | Juste après le rendu de la caméra. | Utilisé pour appliquer des effets de post-traitement personnalisés. |
+| **OnRenderObject** | Après le rendu normal de l'arbre de rendu d'Unity. | Utile pour dessiner des éléments graphiques personnalisés (GL). |
+| **OnWillRenderObject** | Appelé une fois pour chaque caméra si l'objet est visible. | Permet de mettre à jour des données de rendu spécifiques par caméra. |
+
+#### 🖱️ 4. Événements d'Interaction Souris / Entrées Standard
+Principalement utilisés pour les tests de bureau (Desktop Mode) dans l'éditeur.
+
+* `OnMouseDown` / `OnMouseUp` : Clic ou relâchement du clic sur le Collider de l'objet.
+* `OnMouseDrag` : Maintenir le clic enfoncé en déplaçant la souris sur l'objet.
+* `OnMouseEnter` / `OnMouseExit` : Survol du curseur de la souris sur la géométrie de l'objet.
+* `OnMouseOver` : S'exécute en continu à chaque frame tant que la souris reste posée sur l'objet.
+* `OnMouseUpAsButton` : Se déclenche uniquement si le clic a été pressé ET relâché sur le même objet (comportement d'un vrai bouton d'interface).
+
+#### 🧪 5. Événements Spéciaux et Particules
+* `OnAnimatorIK` / `OnAnimatorMove` : Permet de modifier ou d'intercepter les mouvements de l'animateur (Cinématique Inverse, Root Motion).
+* `OnApplicationFocus` / `OnApplicationPause` / `OnApplicationQuit` : Détecte si le joueur change de fenêtre, met son jeu en arrière-plan ou quitte l'application.
+* `OnAudioFilterRead` : Permet de capturer et modifier le flux audio brut d'un `AudioSource`.
+* `OnParticleCollision` / `OnParticleSystemStopped` / `OnParticleTrigger` : Déclenché lorsqu'une particule (système Shuriken d'Unity) frappe un objet ou finit son cycle.
+* `OnTransformChildrenChanged` / `OnTransformParentChanged` : S'exécute si l'arborescence de l'objet est modifiée dynamiquement en jeu.
+* `OnValidate` / `Reset` : Événements exclusifs à l'éditeur Unity pour ranger ou corriger des valeurs de l'inspecteur.
