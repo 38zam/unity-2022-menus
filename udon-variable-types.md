@@ -164,3 +164,38 @@ Commands to manipulate or read data from the actual avatars/players.
 | `SetWalkSpeed` / `SetRunSpeed`| `void` | Modifies avatar movement capabilities (Requires VRChat locomotion to be enabled). |
 | `SetJumpImpulse` | `void` | Changes jump height (Set to 0 to disable jumping). |
 | `GetBonePosition` | `Vector3` | Gets the precise world position of a specific avatar bone (e.g., Index Finger) if the avatar has a humanoid rig. |
+
+## 🔀 4. Control Flow (Logique de Branchement & Boucles)
+**AI DIRECTIVE:** Udon Graph handles logic visually. Use these specific nodes for control flow instead of standard C# syntax assumptions.
+
+| Node Name | Equivalent C# | AI Usage Rules & Warning |
+| :--- | :--- | :--- |
+| `Branch` | `if / else` | Evaluates a `bool`. Has two output flow ports: `True` and `False`. |
+| `For` | `for (...)` | Standard loop. **AI WARNING:** Limit loop iterations. Udon has strict execution limits; massive loops will crash the script. |
+| `While` | `while (...)` | **AI CRITICAL WARNING:** Avoid if possible. Infinite `While` loops will instantly crash VRChat. Always ensure a clear exit condition. |
+| `Block` | `{ ... }` | Executes multiple flow ports sequentially. Useful for organizing complex sequences. |
+
+---
+
+## 🛠️ 5. Special Nodes & Debugging
+Essential nodes for internal script references and troubleshooting.
+
+| Node Name | Purpose | AI Guidelines |
+| :--- | :--- | :--- |
+| `Get Variable` | Read Data | Reads a variable defined in the left-hand Variables panel. |
+| `Set Variable` | Write Data | Writes data to a variable. **AI RULE:** If the variable is `[UdonSynced]` (Manual), you MUST follow this with a `RequestSerialization` node to update others. |
+| `This` | Self Reference | Returns the current `UdonBehaviour`. Use this when an event requires the current script as a target. |
+| `Debug.Log` | Console Info | Prints a standard message to the VRChat output log. |
+| `Debug.LogWarning` | Console Warning | Prints a yellow warning (useful for missing references). |
+| `Debug.LogError` | Console Error | Prints a red error. Highly recommended for AI-generated scripts to catch missing colliders or null players. |
+
+---
+
+## 🧮 6. Logic & Math (Core Operators)
+Basic operations for variables.
+
+| Node Category | Examples | Usage Notes |
+| :--- | :--- | :--- |
+| **Boolean Logic** | `And`, `Or`, `Not`, `Xor` | Used to combine multiple `bool` conditions before plugging into a `Branch` node. |
+| **Math Operations**| `Add`, `Subtract`, `Multiply`, `Divide`| Available for `int`, `float`, and `Vector3`. |
+| **Comparisons** | `Greater`, `Less`, `Equals` | Outputs a `bool` based on two inputs. |
