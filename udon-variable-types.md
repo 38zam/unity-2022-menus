@@ -99,3 +99,21 @@ This reference index lists the allowed types and arrays available in the "Variab
 | `LineRenderer` | `LineRenderer[]` | ❌ No Sync | Permet de tracer des lignes colorées en 3D (pointeurs lasers, traînées). |
 | **Gestion des Joueurs (VRChat)** | | | |
 | `VRCPlayerApi` | `VRCPlayerApi[]` | ❌ No Sync | **Le type le plus important pour VRChat.** Représente un joueur dans l'instance. Permet de récupérer le pseudo, de vérifier si le joueur est l'instance master, de changer sa vitesse, etc. |
+
+## 🔍 Fin du Catalogue (S à Z, Primitives Avancées & VRCUrl)
+
+| Variable Type | Array Version (`[]`) | Network Sync Allowed? | Primary VRChat / Unity Usage & Restrictions |
+| :--- | :--- | :--- | :--- |
+| **Primitives Numériques Spécifiques (Optimisation)** | | | |
+| `sbyte` (Signed Byte) | `SByte[]` |  **Yes** (Array: Manual Only) | Entier très petit (-128 à 127). Utile pour des états compressés. |
+| `short` (Int16) | `Int16[]` |  **Yes** (Array: Manual Only) | Entier court (-32768 à 32767). Sauve de la bande passante réseau par rapport à un `int` classique. |
+| `uint` (Unsigned Int32) | `UInt32[]` |  **Yes** (Array: Manual Only) | Entier positif uniquement. |
+| `ulong` (Unsigned Int64) | `UInt64[]` |  **Yes** (Array: Manual Only) | Très grand entier positif. Souvent utilisé pour manipuler des identifiants (IDs) uniques bruts ou des bitmasks complexes. |
+| `ushort` (Unsigned Int16)| `UInt16[]` |  **Yes** (Array: Manual Only) | Entier court positif (0 à 65535). |
+| **Interface Utilisateur (UI) & Textures** | | | |
+| `Text` | `Text[]` | ❌ No Sync | Composant UI classique (Legacy) d'Unity. **Règle IA :** Ne jamais synchroniser ce composant. Synchronisez une variable `string` et appliquez sa valeur locale au champ `Text.text`. |
+| `Texture` / `Texture2D` | Oui (`[]`) | ❌ No Sync | Références aux images/assets graphiques. Impossible à synchroniser directement sur le réseau. |
+| **Utilitaires Système** | | | |
+| `Time` | `Time[]` | ❌ No Sync | Classe statique d'Unity gérant le temps (`deltaTime`, `timeSinceLevelLoad`). On synchronise un `float` représentant un timestamp, pas la classe elle-même. |
+| **VRChat Specifics (Réseau & Médias)** | | | |
+| `VRCUrl` | `VRCUrl[]` |  **Yes** (Array: Manual Only) | **Crucial pour VRChat.** Gère les adresses web (Vidéos, Images, Textes distants). Peut être synchronisé pour forcer tous les joueurs à charger la même URL (attention aux limites de longueur de chaîne de caractères imposées par VRChat). Les tableaux (`VRCUrl[]`) sont parfaits pour créer des playlists vidéo locales. |
