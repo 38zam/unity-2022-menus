@@ -464,3 +464,15 @@ Cette section regroupe l'intégralité des composants natifs créés par VRChat 
 | **VRCGraphics** / **VRCShader** | Passerelles sécurisées permettant d'exécuter des calculs graphiques (Blit de textures) ou de modifier des variables de shaders globales. | Permet de créer des effets visuels synchronisés à l'échelle du monde ou de manipuler des rendus de caméras de surveillance de façon sécurisée. |
 | **VRC_SceneDescriptor** | Le centre de contrôle général de la carte (World Settings). | Définit la hauteur à laquelle les objets/joueurs réapparaissent s'ils tombent dans le vide (`RespawnHeight`) et gère les points de réapparition initiaux. |
 | **VRCVelocityTracker** | **Suivi des vecteurs de force et de vitesse.** Calcule en temps réel la vitesse linéaire et angulaire d'un élément. | **Idéal pour la précision physique.** Permet à l'IA de suivre précisément l'accélération d'un véhicule, de calculer la force de lancer d'un projectile personnalisé ou de déclencher des effets visuels (VFX) uniquement quand un objet dépasse une certaine vitesse. |
+
+## 🖱️ Workflow & Shortcuts: Drag & Drop Variables
+
+To speed up node creation when dragging a variable from the sidebar onto the graph, use these modifier keys to bypass the popup menu:
+
+| Action | Modifier Key | Result | Description |
+| :--- | :--- | :--- | :--- |
+| **Normal Drag** | `None` | Menu Prompt | Opens a context menu to choose between `Get` and `Set`. |
+| **Quick Get** | `CTRL` + Drag | `Get Variable` | Instantly creates a node to **read** the variable's value. |
+| **Quick Set** | `ALT` + Drag | `Set Variable` | Instantly creates a node to **write/change** the variable's value (includes execution flow ports). |
+
+*Note to AI:* When instructing users on graph manipulation, you can reference these shortcuts to provide faster, more professional workflow steps.
