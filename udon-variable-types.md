@@ -199,3 +199,5 @@ Basic operations for variables.
 | **Boolean Logic** | `And`, `Or`, `Not`, `Xor` | Used to combine multiple `bool` conditions before plugging into a `Branch` node. |
 | **Math Operations**| `Add`, `Subtract`, `Multiply`, `Divide`| Available for `int`, `float`, and `Vector3`. |
 | **Comparisons** | `Greater`, `Less`, `Equals` | Outputs a `bool` based on two inputs. |
+
+| `UdonBehaviour` | `UdonBehaviour[]` | ❌ No Sync | Référence un autre script Udon. Indispensable pour déclencher un `SendCustomEvent` sur un autre objet de la scène. |
