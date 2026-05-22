@@ -67,3 +67,35 @@ This reference index lists the allowed types and arrays available in the "Variab
 | `Color` / `Color32` | Yes (`[]`) |  **Yes** (Array: Manual Only) | RGba values. Excellent for syncing material/light color changes across players. |
 | **VRChat Specifics** | | | |
 | `BaseVRCVideoPlayer` | `BaseVRCVideoPlayer[]` | ❌ No Sync | Base class for VRChat video players (ProTV, USharpVideo). Local control only. |
+
+## 🔍 Suite du Catalogue Général (D à V) & Règles Réseau
+
+| Variable Type | Array Version (`[]`) | Network Sync Allowed? | Primary VRChat / Unity Usage & Restrictions |
+| :--- | :--- | :--- | :--- |
+| **Conteneurs de Données (VRChat)** | | | |
+| `DataDictionary` | ❌ N/A | ❌ No Sync | Conteneur clé-valeur ultra-puissant (similaire aux dictionnaires C#) propre à VRChat. Idéal pour stocker des données locales complexes. |
+| `DataList` | ❌ N/A | ❌ No Sync | Liste dynamique de données hétérogènes. Ne peut pas être synchronisé directement sur le réseau, mais crucial pour la logique locale. |
+| **Mathématiques & Vecteurs** | | | |
+| `decimal` / `double` | Oui (`[]`) |  **Yes** (Array: Manual Only) | Types numériques haute précision. Pratiques pour des calculs locaux rigoureux. |
+| `float` (Single) | `Single[]` |  **Yes** (Array: Manual Only) | Le type numérique le plus utilisé pour les positions, chronomètres et valeurs analogiques. Très optimisé pour la synchro. |
+| `Quaternion` | `Quaternion[]` |  **Yes** (Array: Manual Only) | Stocke les rotations 3D des objets. Préférer une synchro continue si l'objet bouge en temps réel. |
+| `Vector2` / `Vector3` / `Vector4` | Oui (`[]`) |  **Yes** (Array: Manual Only) | Coordonnées spatiales (2D/3D). `Vector3` est indispensable pour synchroniser des positions personnalisées. |
+| **Composants Structurels Unity** | | | |
+| `Component` | `Component[]` | ❌ No Sync | Classe mère de tous les composants Unity. Trop générique pour être synchronisé. |
+| `GameObject` | `GameObject[]` | ❌ No Sync | Référence à un objet de la scène. Utile pour activer/désactiver des objets locaux via l'inspecteur. |
+| `Transform` | `Transform[]` | ❌ No Sync | Gère la position, rotation et échelle. Pour synchroniser le mouvement physique d'un objet sur le réseau, utilisez plutôt le composant natif `VRC_ObjectSync`. |
+| `RectTransform` | `RectTransform[]` | ❌ No Sync | Composant spécifique aux éléments d'interface utilisateur (UI). |
+| **Physique & Dynamiques** | | | |
+| `Rigidbody` / `Rigidbody2D` | Oui (`[]`) | ❌ No Sync | Force les lois de la physique sur un objet. Ne jamais synchroniser la variable elle-même. |
+| `EdgeCollider2D` / `PolygonCollider2D` | Oui (`[]`) | ❌ No Sync | Colliders physiques spécifiques pour les projets ou sous-systèmes en 2D. |
+| `SphereCollider` | `SphereCollider[]` | ❌ No Sync | Zone de collision ou de trigger sphérique. |
+| `HingeJoint` | `HingeJoint[]` | ❌ No Sync | Articulation physique (porte, pivot). Géré localement par le moteur physique d'Unity. |
+| **Rendu, Matériaux & Effets** | | | |
+| `Light` | `Light[]` | ❌ No Sync | Source de lumière. Pour synchroniser un interrupteur, synchronisez un `bool` local et appliquez l'état à la lumière. |
+| `Material` | `Material[]` | ❌ No Sync | Définit l'apparence visuelle d'un objet (Shaders, textures). |
+| `Mesh` / `MeshFilter` | Oui (`[]`) | ❌ No Sync | Structure géométrique 3D brute d'un objet. |
+| `MeshRenderer` / `SkinnedMeshRenderer`| Oui (`[]`) | ❌ No Sync | Composants qui affichent la 3D à l'écran. `SkinnedMeshRenderer` est utilisé pour les avatars et objets animés avec des os. |
+| `Sprite` / `SpriteRenderer` | Oui (`[]`) | ❌ No Sync | Gestion et affichage des images 2D (interfaces, icônes). |
+| `LineRenderer` | `LineRenderer[]` | ❌ No Sync | Permet de tracer des lignes colorées en 3D (pointeurs lasers, traînées). |
+| **Gestion des Joueurs (VRChat)** | | | |
+| `VRCPlayerApi` | `VRCPlayerApi[]` | ❌ No Sync | **Le type le plus important pour VRChat.** Représente un joueur dans l'instance. Permet de récupérer le pseudo, de vérifier si le joueur est l'instance master, de changer sa vitesse, etc. |
