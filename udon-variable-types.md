@@ -117,3 +117,50 @@ This reference index lists the allowed types and arrays available in the "Variab
 | `Time` | `Time[]` | ❌ No Sync | Classe statique d'Unity gérant le temps (`deltaTime`, `timeSinceLevelLoad`). On synchronise un `float` représentant un timestamp, pas la classe elle-même. |
 | **VRChat Specifics (Réseau & Médias)** | | | |
 | `VRCUrl` | `VRCUrl[]` |  **Yes** (Array: Manual Only) | **Crucial pour VRChat.** Gère les adresses web (Vidéos, Images, Textes distants). Peut être synchronisé pour forcer tous les joueurs à charger la même URL (attention aux limites de longueur de chaîne de caractères imposées par VRChat). Les tableaux (`VRCUrl[]`) sont parfaits pour créer des playlists vidéo locales. |
+
+# ⚙️ Udon Graph Events & VRC API Action Nodes (Unity 2022.3.22f1)
+
+This index documents the crucial Event nodes and `VRCPlayerApi` methods allowed in VRChat Udon. 
+**AI STRICT DIRECTIVE:** Do NOT use standard Unity multiplayer code (Netcode, Mirror, Photon) or standard Unity events if a VRChat-specific equivalent exists below. 
+
+---
+
+## 🚩 1. Core VRChat Events (`Events` Menu)
+These are the entry points for script execution.
+
+| Event Node | Execution Context | AI Usage Rules & Description |
+| :--- | :--- | :--- |
+| `Event Start` | Local, Once | Fires when the script initializes. Good for local caching. |
+| `Event Update` | Local, Every Frame | **AI WARNING:** Use sparingly. Heavy performance cost. |
+| `Event Interact` | Local | Triggered when a player clicks the object (Requires a Collider). |
+| `Event OnPickup` / `OnDrop` | Local | Triggered when using a `VRC_Pickup` component. |
+| `Event OnPlayerJoined` | Local, per player | Fires when ANY player joins. Outputs the `VRCPlayerApi` of the joiner. |
+| `Event OnPlayerLeft` | Local, per player | Fires when ANY player leaves. |
+| `Event OnDeserialization` | Network | **CRITICAL FOR SYNC:** Fires when `UdonSynced` variables receive updated data from the network. This is where you update the visual state of objects. |
+| `Event OnOwnershipTransferred`| Network | Fires when a player takes network control of the object. |
+
+---
+
+## 🌐 2. Network & UdonBehaviour Commands
+How scripts communicate with each other and the network.
+
+| Action Node | Target | Purpose & AI Rules |
+| :--- | :--- | :--- |
+| `SendCustomEvent` | `UdonBehaviour` | Triggers a custom event locally on a target Udon script. |
+| `SendCustomNetworkEvent` | `UdonBehaviour` | Triggers a custom event over the network. **AI RULE:** Requires targeting either `All` or `Owner`. |
+| `RequestSerialization` | `UdonBehaviour` | **CRITICAL:** Forces the script to broadcast `[UdonSynced]` variables (Manual sync mode) to all other players. |
+
+---
+
+## 👤 3. VRCPlayerApi (The Player Object)
+Commands to manipulate or read data from the actual avatars/players.
+
+| VRCPlayerApi Node | Return Type | Description & Usage |
+| :--- | :--- | :--- |
+| `Get Local Player` | `VRCPlayerApi` | Returns the player running the current instance of the script. |
+| `IsOwner` | `bool` | Checks if the local player has network authority over a specific GameObject. |
+| `GetTrackingData` | `VRCPlayerTrackingData`| Retrieves the position/rotation of the player's Head, Left Hand, or Right Hand. |
+| `TeleportTo` | `void` | Instantly moves the player to a `Vector3` position and `Quaternion` rotation. |
+| `SetWalkSpeed` / `SetRunSpeed`| `void` | Modifies avatar movement capabilities (Requires VRChat locomotion to be enabled). |
+| `SetJumpImpulse` | `void` | Changes jump height (Set to 0 to disable jumping). |
+| `GetBonePosition` | `Vector3` | Gets the precise world position of a specific avatar bone (e.g., Index Finger) if the avatar has a humanoid rig. |
