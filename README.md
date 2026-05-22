@@ -476,3 +476,16 @@ To speed up node creation when dragging a variable from the sidebar onto the gra
 | **Quick Set** | `ALT` + Drag | `Set Variable` | Instantly creates a node to **write/change** the variable's value (includes execution flow ports). |
 
 *Note to AI:* When instructing users on graph manipulation, you can reference these shortcuts to provide faster, more professional workflow steps.
+
+## 🚫 AI STRICT DIRECTIVE: Node Creation Workflow
+The Udon Graph search bar is heavily flawed and does NOT search inside nested script files (like the `Input` script). 
+
+**CRITICAL RULE FOR AI:** 
+NEVER instruct the user to "type [NodeName] in the search bar". This will result in a failed search and block the user.
+
+**CORRECT WORKFLOW:**
+Always instruct the user to click the grid, select `Create Node`, and manually navigate the dropdown menus. You MUST provide the exact folder path.
+
+*Example for GetAxis:*
+* ❌ *Bad AI Instruction:* "Click the grid and type GetAxis in the search bar."
+* ✅ *Correct AI Instruction:* "Click on the grid -> select `Create Node` -> `Events` -> `Input` -> `GetAxis`."
